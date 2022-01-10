@@ -1,42 +1,26 @@
-# gRPC-sql-test :star:
- gRPC is a modern open source high performance Remote Procedure Call (RPC) framework that can run in any environment.
+# golang-test :star:
+ 2 transport rest http and grpc
 
 ## Data initialization
- implemented use gRPC gateway, this example will have databases supported. There are MySQL using gorm as library.
+ using gorm as library to write log each search call with method below.
  
- gRPC Design
+ Design
  - Explicitly separate User-Side, Business Logic, and Server-Side
  - Dependencies are going from User-Side and Server-Side to the Business Logic
 
-## How To Consume The API
+## How To Consume The rest API http
 
-	//list endpoint
-	post: "/voucher/{id}"
-	endpoint voucher with param by id (voucher no) to get voucher information, mercant name and valid date time 
+	//Get all data movies
+	METHOD GET: "/movies"
 	
+	//using queryParams
+	example http://localhost:8000/movies?s=Batman&page=2
+	return data movies with title Batman and rowPage 2
 	
-	post: "/mercant/{mercant_id}/{id}"
-  	endpoint mercant use to store / transaction voucher to mercant base on mercant_id and voucher_id  
-
+	//Get movies by ID
+	METHOD GET: "/movies/id"
 	
-## Relation table
-
-	type Voucher struct {
-	Id            uint
-	MercantId     []Mercant
-	VoucherNo     string
-	VoucherStatus uint
-	VoucherValid  timestamppb.Timestamp
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-	}
+	//using queryParams
+	example http://localhost:8000/movies/id?i=tt0106364
+	return data movies with title ID tt0106364
 	
-	type Mercant struct {
-	Id          int
-	MercantName string
-	MaxVoucher  int
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	}
-	
-
