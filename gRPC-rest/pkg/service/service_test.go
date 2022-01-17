@@ -57,7 +57,7 @@ func TestInsertLogs(t *testing.T) {
 	})
 
 	t.Run("Expect insert log failed", func(t *testing.T) {
-		logRepo.On("CreateProduct", mock.AnythingOfType("models.Logs"), mock.AnythingOfType("string")).Return("ErrInternalServerError").Once()
+		logRepo.On("InsertLog", mock.AnythingOfType("models.Logs"), mock.AnythingOfType("string")).Return("ErrInternalServerError").Once()
 
 		err := logService.InsertLog(logData)
 		assert.NotNil(t, err)

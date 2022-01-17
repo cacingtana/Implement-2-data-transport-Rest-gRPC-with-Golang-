@@ -13,11 +13,11 @@ type Repository struct {
 func (t *Repository) InsertLog(_t models.Logs) error {
 	ret := t.Called(_t)
 
-	var tProductError error
+	var tLogs error
 	if rf, ok := ret.Get(0).(func(models.Logs) error); ok {
-		tProductError = rf(_t)
+		tLogs = rf(_t)
 	} else {
-		tProductError = ret.Error(0)
+		tLogs = ret.Error(0)
 	}
-	return tProductError
+	return tLogs
 }

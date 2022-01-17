@@ -13,12 +13,12 @@ type Service struct {
 func (t *Service) InsertLog(logs models.Logs) error {
 	ret := t.Called(logs)
 
-	var tProductError error
+	var tLogs error
 	if rf, ok := ret.Get(0).(func(models.Logs) error); ok {
-		tProductError = rf(logs)
+		tLogs = rf(logs)
 	} else {
-		tProductError = ret.Error(0)
+		tLogs = ret.Error(0)
 	}
 
-	return tProductError
+	return tLogs
 }
