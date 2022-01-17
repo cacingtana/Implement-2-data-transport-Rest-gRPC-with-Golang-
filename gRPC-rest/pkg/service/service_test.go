@@ -1,6 +1,7 @@
 package service_test
 
 import (
+	"grpc-rest/api-protocol/rest/response"
 	"grpc-rest/pkg/models"
 	"grpc-rest/pkg/service"
 	"os"
@@ -57,11 +58,11 @@ func TestInsertLogs(t *testing.T) {
 	})
 
 	t.Run("Expect insert log failed", func(t *testing.T) {
-		logRepo.On("InsertLog", mock.AnythingOfType("models.Logs"), mock.AnythingOfType("string")).Return("ErrInternalServerError").Once()
+		logRepo.On("InsertLog", mock.AnythingOfType("models.Logs"), mock.AnythingOfType("string")).Return(response.ErrInternalServerError).Once()
 
 		err := logService.InsertLog(logData)
 		assert.NotNil(t, err)
-		assert.Equal(t, err, "ErrInternalServerError")
+		assert.Equal(t, err, response.ErrInternalServerError)
 	})
 }
 
