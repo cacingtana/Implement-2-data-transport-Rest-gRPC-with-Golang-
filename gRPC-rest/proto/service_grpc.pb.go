@@ -18,8 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MoviesApiClient interface {
-	GetAllMovies(ctx context.Context, in *PageSearchRequest, opts ...grpc.CallOption) (*PageSearchResponse, error)
-	GetMoviesById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*PageSearchResponse, error)
+	GetAllMovies(ctx context.Context, in *PageSearchRequest, opts ...grpc.CallOption) (*Info, error)
+	GetMoviesById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Movies, error)
 }
 
 type moviesApiClient struct {
@@ -30,8 +30,8 @@ func NewMoviesApiClient(cc grpc.ClientConnInterface) MoviesApiClient {
 	return &moviesApiClient{cc}
 }
 
-func (c *moviesApiClient) GetAllMovies(ctx context.Context, in *PageSearchRequest, opts ...grpc.CallOption) (*PageSearchResponse, error) {
-	out := new(PageSearchResponse)
+func (c *moviesApiClient) GetAllMovies(ctx context.Context, in *PageSearchRequest, opts ...grpc.CallOption) (*Info, error) {
+	out := new(Info)
 	err := c.cc.Invoke(ctx, "/proto.MoviesApi/GetAllMovies", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -39,8 +39,8 @@ func (c *moviesApiClient) GetAllMovies(ctx context.Context, in *PageSearchReques
 	return out, nil
 }
 
-func (c *moviesApiClient) GetMoviesById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*PageSearchResponse, error) {
-	out := new(PageSearchResponse)
+func (c *moviesApiClient) GetMoviesById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Movies, error) {
+	out := new(Movies)
 	err := c.cc.Invoke(ctx, "/proto.MoviesApi/GetMoviesById", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -52,8 +52,8 @@ func (c *moviesApiClient) GetMoviesById(ctx context.Context, in *IdRequest, opts
 // All implementations must embed UnimplementedMoviesApiServer
 // for forward compatibility
 type MoviesApiServer interface {
-	GetAllMovies(context.Context, *PageSearchRequest) (*PageSearchResponse, error)
-	GetMoviesById(context.Context, *IdRequest) (*PageSearchResponse, error)
+	GetAllMovies(context.Context, *PageSearchRequest) (*Info, error)
+	GetMoviesById(context.Context, *IdRequest) (*Movies, error)
 	mustEmbedUnimplementedMoviesApiServer()
 }
 
@@ -61,10 +61,10 @@ type MoviesApiServer interface {
 type UnimplementedMoviesApiServer struct {
 }
 
-func (UnimplementedMoviesApiServer) GetAllMovies(context.Context, *PageSearchRequest) (*PageSearchResponse, error) {
+func (UnimplementedMoviesApiServer) GetAllMovies(context.Context, *PageSearchRequest) (*Info, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllMovies not implemented")
 }
-func (UnimplementedMoviesApiServer) GetMoviesById(context.Context, *IdRequest) (*PageSearchResponse, error) {
+func (UnimplementedMoviesApiServer) GetMoviesById(context.Context, *IdRequest) (*Movies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMoviesById not implemented")
 }
 func (UnimplementedMoviesApiServer) mustEmbedUnimplementedMoviesApiServer() {}

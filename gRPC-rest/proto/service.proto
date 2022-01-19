@@ -7,16 +7,16 @@ option go_package = "./proto";
 import "google/api/annotations.proto";
 
 service MoviesApi {
-    rpc GetAllMovies(pageSearchRequest) returns (pageSearchResponse) {
+    rpc GetAllMovies(pageSearchRequest) returns (Info) {
         option (google.api.http) = {
-            post: "/movies"
+            post: "/movies/{search}/{page}"
             body: "*"
         };
     }
-    rpc GetMoviesById(idRequest) returns (pageSearchResponse) {
+    rpc GetMoviesById(idRequest) returns (Movies) {
             option (google.api.http) = {
-            post: "/movies/id"
-            body: "*"
+            post: "/movies/{id}"
+            body: "id"
         };
     }
 }
@@ -42,12 +42,4 @@ message idRequest {
 message pageSearchRequest {
     string page     = 1;
     string search   = 2;
-}
-
-message idResponse {
-    Movies movies = 1;
-}
-
-message pageSearchResponse {
-    Movies movies = 1;
 }

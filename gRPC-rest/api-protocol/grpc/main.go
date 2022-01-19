@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"grpc-rest/api-protocol/rest/request"
 	pb "grpc-rest/proto"
 	"log"
+	"reflect"
 
 	"net"
 	"net/http"
@@ -12,16 +15,37 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Api struct {
+type GetApi struct {
 	pb.UnimplementedMoviesApiServer
+	request request.RequestMovies
 }
 
-func (s *Api) GetAllMovies(ctx context.Context, req *pb.PageSearchRequest) (*pb.PageSearchResponse, error) {
-	return &pb.PageSearchResponse{}, nil
+func (s *GetApi) GetAllMovies(ctx context.Context, req *pb.PageSearchRequest) (*pb.Info, error) {
+	fmt.Println(reflect.TypeOf(req.Page))
+	value := s.request.GetAllMovies(string(req.Page), string(req.Search))
+	fmt.Println(value)
+	return &pb.Info{
+		Movies: &pb.Movies{
+			Title:  "value.Search",
+			Year:   "2001",
+			ImdbID: "1001",
+			Poster: "contoh",
+			Type:   "contoh",
+		},
+		TotalResults: value.TotalResults,
+		Response:     value.Response,
+	}, nil
 }
 
-func (s *Api) GetMoviesById(ctx context.Context, req *pb.IdRequest) (*pb.IdResponse, error) {
-	return &pb.IdResponse{}, nil
+func (s *GetApi) GetMoviesById(ctx context.Context, req *pb.IdRequest) (*pb.Movies, error) {
+	fmt.Println(req)
+	return &pb.Movies{
+		Title:  "contoh",
+		Year:   "2001",
+		ImdbID: "1001",
+		Poster: "contoh",
+		Type:   "contoh",
+	}, nil
 }
 
 func main() {
@@ -31,10 +55,11 @@ func main() {
 		mux := runtime.NewServeMux()
 
 		//Register
-		pb.RegisterMoviesApiHandlerServer(context.Background(), mux, nil)
-
+		pb.RegisterMoviesApiHandlerServer(context.Background(), mux, &GetApi{})
+		//pb.RegisterMoviesApiHandlerServer(context.Background(), mux, &Api{})
+		fmt.Println("Server running on port : 8000")
 		//http Server
-		log.Fatalln(http.ListenAndServe("localhost:8081", mux))
+		log.Fatalln(http.ListenAndServe("localhost:8000", mux))
 
 	}()
 
@@ -44,7 +69,7 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterMoviesApiServer(grpcServer, nil)
+	pb.RegisterMoviesApiServer(grpcServer, &GetApi{})
 
 	err = grpcServer.Serve(listen)
 	if err != nil {
