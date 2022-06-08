@@ -1,11 +1,10 @@
 # 2 transport rest http and grpc :star:
- 
- https://miro.medium.com/max/1400/1*xW6KwVfQFVEiZyrCD4NAzw.png
 
+![golang](https://miro.medium.com/max/1400/1*xW6KwVfQFVEiZyrCD4NAzw.png)
+ 
 ## Data initialization
  using gorm as library to write log each search call with method below.
  
- Design
  - Explicitly separate User-Side, Business Logic, and Server-Side
  - Dependencies are going from User-Side and Server-Side to the Business Logic
 
